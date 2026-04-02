@@ -22,4 +22,18 @@ build/
 .claude/
 
 papers/
-app.py 
+app.py
+
+# Datasets (too large for git — download separately)
+dataset_*.zip
+smd/
+scania/
+genesis/
+exathlon/
+damadics/
+
+# Evaluation spreadsheet
+evaluate_mts_datasets.csv
+
+# Temporary / local files
+requirements_local.txt
