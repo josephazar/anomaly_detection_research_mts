@@ -78,6 +78,10 @@ One thing that kept coming up as we worked through these datasets:
 
 This matters for methods like TICC that segment time series into regimes. Genesis is the clearest example (9 labeled phases), but all five datasets show some form of regime structure when you look at the right temporal scale.
 
+## Other
+
+The [`mtad-gat-experiment/`](mtad-gat-experiment/) folder contains an MTAD-GAT implementation and a sample dataset from Azure Anomaly Detector -- separate from the dataset exploration work above.
+
 ## References
 
 - **SMD**: Su et al., *Robust Anomaly Detection for Multivariate Time Series through Stochastic Recurrent Neural Network*, KDD 2019
