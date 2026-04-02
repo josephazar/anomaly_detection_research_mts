@@ -1,105 +1,87 @@
-# Multivariate Time Series Dataset Exploration for Anomaly Detection Research
+# MTS Dataset Exploration for Anomaly Detection Research
 
-Exploration and visualization notebooks for **5 industrial multivariate time series (MTS) datasets**, designed to support PhD research on:
+Exploration and visualization notebooks for **5 industrial multivariate time series datasets**, selected to support research on:
 
-- **Temporal Clustering** -- discovering operational phases/regimes (e.g., warm-up, steady-state, shutdown), where each phase can itself contain anomalies
-- **Unsupervised Anomaly Detection** -- identifying deviations from normal behavior without labeled training data
-- **Early Prediction / Predictive Maintenance / RUL** -- detecting degradation patterns before failures occur
+- **Temporal clustering** -- discovering operational phases (warm-up, steady-state, shutdown, etc.), not anomaly types
+- **Unsupervised anomaly detection** -- finding deviations without labeled training data
+- **Predictive maintenance / early detection** -- spotting degradation before failure
+
+No ML models here -- just data exploration, visualization, and an honest assessment of what each dataset can and can't do.
 
 ## Datasets
 
-| # | Dataset | Domain | Dimensions | Samples | Key Feature |
-|---|---------|--------|-----------|---------|-------------|
-| 1 | **SMD** (Server Machine Dataset) | Server monitoring | 38 | ~1.4M | 28 machines in 3 groups with point-level anomaly labels |
-| 2 | **SCANIA Component X** | Heavy-duty trucks | 105 | ~1.1M | Time-to-event labels for predictive maintenance |
-| 3 | **Genesis Demonstrator** | Smart manufacturing | 18 | ~16K | 9-state machine labels (ground truth for clustering) |
-| 4 | **Exathlon** | Spark streaming apps | 2,283 | ~47K/trace | Multiple anomaly types with root cause annotations |
-| 5 | **DAMADICS** | Sugar factory actuators | 32 | 2.16M | 25 days continuous operation with known fault injection |
+| # | Dataset | Domain | Dims | Samples | What makes it interesting |
+|---|---------|--------|-----:|--------:|---------------------------|
+| 1 | **SMD** | Server monitoring | 38 | 1.4M | 28 machines in 3 groups; interpretation labels for each anomaly |
+| 2 | **SCANIA** | Heavy-duty trucks | 105 | 1.1M | Real fleet data with time-to-event labels |
+| 3 | **Genesis** | Smart manufacturing | 18 | 16K | 9 state machine labels = ground truth for clustering |
+| 4 | **Exathlon** | Spark streaming | 2,283 | 47K/trace | Root cause annotations; extreme dimensionality |
+| 5 | **DAMADICS** | Sugar factory | 32 | 2.16M | 25 days continuous; clear intra-day regime structure |
+
+We evaluated 16 datasets total before picking these five. Full evaluation with scores and reasoning: [`DATASET_EVALUATION.md`](DATASET_EVALUATION.md)
 
 ## Notebooks
 
-Each notebook provides:
-- **Dataset overview** -- structure, dimensions, statistics
-- **Time series visualization** -- multivariate plots with anomaly highlighting
-- **Correlation analysis** -- inter-feature and inter-entity relationships
-- **Clustering potential** -- operational regime discovery, entity grouping, phase transitions
-- **Anomaly precursor analysis** -- pre-fault signal evolution, early detection windows
-- **Dataset suitability assessment** -- structured scoring for clustering, AD, and predictive maintenance
+| Notebook | Clustering | AD | Pred. Maint. |
+|----------|:----------:|:--:|:------------:|
+| [`01_SMD_Exploration.ipynb`](01_SMD_Exploration.ipynb) | 7/10 | 9/10 | 5/10 |
+| [`02_SCANIA_Exploration.ipynb`](02_SCANIA_Exploration.ipynb) | 7/10 | 8/10 | 9/10 |
+| [`03_Genesis_Exploration.ipynb`](03_Genesis_Exploration.ipynb) | 9/10 | 8/10 | 6/10 |
+| [`04_Exathlon_Exploration.ipynb`](04_Exathlon_Exploration.ipynb) | 6/10 | 9/10 | 6/10 |
+| [`05_DAMADICS_Exploration.ipynb`](05_DAMADICS_Exploration.ipynb) | 8/10 | 8/10 | 7/10 |
 
-| Notebook | Dataset | Suitability Scores (Clustering / AD / Early Detection) |
-|----------|---------|-------------------------------------------------------|
-| `01_SMD_Exploration.ipynb` | SMD | 7/10 -- 9/10 -- 5/10 |
-| `02_SCANIA_Exploration.ipynb` | SCANIA | 7/10 -- 8/10 -- 9/10 |
-| `03_Genesis_Exploration.ipynb` | Genesis | 5/5 -- 4/5 -- 3/5 |
-| `04_Exathlon_Exploration.ipynb` | Exathlon | Moderate -- HIGH -- Moderate |
-| `05_DAMADICS_Exploration.ipynb` | DAMADICS | HIGH -- GOOD -- MODERATE |
+Each notebook covers:
+- Dataset structure and basic statistics
+- Multivariate time series plots with anomaly regions highlighted
+- Feature correlation analysis (normal vs anomalous)
+- Operational regime discovery (rolling-window statistics, phase transitions)
+- Anomaly precursor analysis (pre-fault signal drift, early detection windows)
+- A suitability assessment with concrete next steps
 
 ## Setup
 
 ```bash
-# Create and activate virtual environment
 python3 -m venv venv
 source venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
 ## Data
 
-Datasets are **not included** in the repository due to size. Download the following zip files and extract them in the project root:
+Datasets are too large for git. Download and extract these zips in the project root:
 
-| File | Extract To | Size |
-|------|-----------|------|
+| File | Extracts to | Size |
+|------|------------|------|
 | `dataset_smd.zip` | `smd/` | ~100 MB |
 | `dataset_scania.zip` | `scania/` | ~84 MB |
 | `dataset_genesis.zip` | `genesis/` | ~0.6 MB |
 | `dataset_exathlon.zip` | `exathlon/` | ~227 MB |
 | `dataset_damadics.zip` | `damadics/` | ~90 MB |
 
-After extraction, your directory should look like:
+Expected directory layout after extraction:
 ```
 .
 ├── 01_SMD_Exploration.ipynb
-├── 02_SCANIA_Exploration.ipynb
-├── 03_Genesis_Exploration.ipynb
-├── 04_Exathlon_Exploration.ipynb
-├── 05_DAMADICS_Exploration.ipynb
-├── requirements.txt
-├── smd/
-│   ├── train/
-│   ├── test/
-│   ├── test_label/
-│   └── interpretation_label/
-├── scania/
-│   ├── test_operational_readouts.csv
-│   ├── test_labels.csv
-│   └── ...
-├── genesis/
-│   ├── Genesis_normal.csv
-│   ├── Genesis_AnomalyLabels.csv
-│   └── ...
-├── exathlon/
-│   └── data/raw/
-│       ├── ground_truth.csv
-│       └── app1/ ... app10/
-└── damadics/
-    ├── 01112001.txt
-    └── ...
+├── ...
+├── smd/           (train/, test/, test_label/, interpretation_label/)
+├── scania/        (test_operational_readouts.csv, test_labels.csv, ...)
+├── genesis/       (Genesis_normal.csv, Genesis_AnomalyLabels.csv, ...)
+├── exathlon/      (data/raw/ground_truth.csv, data/raw/app1/ ... app10/)
+└── damadics/      (01112001.txt ... 22112001.txt)
 ```
 
-## Key Concept: Clusters vs Anomalies
+## A Note on Clustering vs Anomaly Detection
 
-A central theme across these notebooks:
+One thing that kept coming up as we worked through these datasets:
 
-> **A cluster is NOT an anomaly type.** A cluster represents an *operational phase* (e.g., machine warming up, running at steady state, shutting down). Each phase can contain anomalies within it. Clustering discovers the normal operational structure; anomaly detection finds deviations within that structure.
+> A cluster is not an anomaly type. A cluster is an operational phase -- the machine warming up, running normally, cooling down. Anomalies can happen *within* any phase. Clustering discovers structure; anomaly detection finds deviations from it.
 
-This distinction is critical for methods like TICC (Toeplitz Inverse Covariance-based Clustering) that segment multivariate time series into temporal regimes.
+This matters for methods like TICC that segment time series into regimes. Genesis is the clearest example (9 labeled phases), but all five datasets show some form of regime structure when you look at the right temporal scale.
 
 ## References
 
-- **SMD**: Su et al., "Robust Anomaly Detection for Multivariate Time Series through Stochastic Recurrent Neural Network", KDD 2019
-- **SCANIA**: Garan et al., "SCANIA Component X Dataset", 2024
-- **Genesis**: Atzmueller et al., Genesis Demonstrator Dataset for smart manufacturing
-- **Exathlon**: Jacob et al., "Exathlon: A Benchmark for Explainable Anomaly Detection over Time Series", VLDB 2021
-- **DAMADICS**: DAMADICS Benchmark for Fault Detection and Isolation, Lublin Sugar Factory
+- **SMD**: Su et al., *Robust Anomaly Detection for Multivariate Time Series through Stochastic Recurrent Neural Network*, KDD 2019
+- **SCANIA**: Garan et al., *SCANIA Component X Dataset*, 2024
+- **Genesis**: Atzmueller et al., *Genesis Demonstrator Dataset*
+- **Exathlon**: Jacob et al., *Exathlon: A Benchmark for Explainable Anomaly Detection over Time Series*, VLDB 2021
+- **DAMADICS**: Bartys et al., *DAMADICS Benchmark for Fault Detection and Isolation*, Lublin Sugar Factory
