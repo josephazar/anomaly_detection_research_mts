@@ -1,24 +1,22 @@
 # MTS Dataset Exploration for Anomaly Detection Research
 
-Exploration and visualization notebooks for **5 industrial multivariate time series datasets**, selected to support research on:
+Exploration notebooks for 5 industrial multivariate time series datasets, covering:
 
-- **Temporal clustering** -- discovering operational phases (warm-up, steady-state, shutdown, etc.), not anomaly types
-- **Unsupervised anomaly detection** -- finding deviations without labeled training data
-- **Predictive maintenance / early detection** -- spotting degradation before failure
-
-No ML models here -- just data exploration, visualization, and an honest assessment of what each dataset can and can't do.
+- **Temporal clustering** -- operational phase/regime discovery (warm-up, steady-state, shutdown)
+- **Unsupervised anomaly detection**
+- **Predictive maintenance / early detection / RUL**
 
 ## Datasets
 
-| # | Dataset | Domain | Dims | Samples | What makes it interesting |
-|---|---------|--------|-----:|--------:|---------------------------|
-| 1 | **SMD** | Server monitoring | 38 | 1.4M | 28 machines in 3 groups; interpretation labels for each anomaly |
-| 2 | **SCANIA** | Heavy-duty trucks | 105 | 1.1M | Real fleet data with time-to-event labels |
-| 3 | **Genesis** | Smart manufacturing | 18 | 16K | 9 state machine labels = ground truth for clustering |
-| 4 | **Exathlon** | Spark streaming | 2,283 | 47K/trace | Root cause annotations; extreme dimensionality |
-| 5 | **DAMADICS** | Sugar factory | 32 | 2.16M | 25 days continuous; clear intra-day regime structure |
+| # | Dataset | Domain | Dims | Samples | Notable properties |
+|---|---------|--------|-----:|--------:|---------------------|
+| 1 | **SMD** | Server monitoring | 38 | 1.4M | 28 machines in 3 groups; interpretation labels |
+| 2 | **SCANIA** | Heavy-duty trucks | 105 | 1.1M | Fleet data with time-to-event labels |
+| 3 | **Genesis** | Smart manufacturing | 18 | 16K | 9 state machine labels (clustering ground truth) |
+| 4 | **Exathlon** | Spark streaming | 2,283 | 47K/trace | Root cause annotations; high dimensionality |
+| 5 | **DAMADICS** | Sugar factory | 32 | 2.16M | 25 days continuous; intra-day regime structure |
 
-We evaluated 16 datasets total before picking these five. Full evaluation with scores and reasoning: [`DATASET_EVALUATION.md`](DATASET_EVALUATION.md)
+Full evaluation of 16 candidate datasets: [`DATASET_EVALUATION.md`](DATASET_EVALUATION.md)
 
 ## Notebooks
 
@@ -30,13 +28,7 @@ We evaluated 16 datasets total before picking these five. Full evaluation with s
 | [`04_Exathlon_Exploration.ipynb`](04_Exathlon_Exploration.ipynb) | 6/10 | 9/10 | 6/10 |
 | [`05_DAMADICS_Exploration.ipynb`](05_DAMADICS_Exploration.ipynb) | 8/10 | 8/10 | 7/10 |
 
-Each notebook covers:
-- Dataset structure and basic statistics
-- Multivariate time series plots with anomaly regions highlighted
-- Feature correlation analysis (normal vs anomalous)
-- Operational regime discovery (rolling-window statistics, phase transitions)
-- Anomaly precursor analysis (pre-fault signal drift, early detection windows)
-- A suitability assessment with concrete next steps
+Each notebook includes: dataset overview, time series visualization, correlation analysis, operational regime discovery, anomaly precursor analysis, and a suitability assessment.
 
 ## Setup
 
@@ -48,7 +40,7 @@ pip install -r requirements.txt
 
 ## Data
 
-Datasets are too large for git. Download and extract these zips in the project root:
+Datasets are not included (too large). Download and extract in the project root:
 
 | File | Extracts to | Size |
 |------|------------|------|
@@ -58,7 +50,7 @@ Datasets are too large for git. Download and extract these zips in the project r
 | `dataset_exathlon.zip` | `exathlon/` | ~227 MB |
 | `dataset_damadics.zip` | `damadics/` | ~90 MB |
 
-Expected directory layout after extraction:
+Expected layout:
 ```
 .
 ├── 01_SMD_Exploration.ipynb
@@ -70,17 +62,13 @@ Expected directory layout after extraction:
 └── damadics/      (01112001.txt ... 22112001.txt)
 ```
 
-## A Note on Clustering vs Anomaly Detection
+## Clustering vs Anomaly Detection
 
-One thing that kept coming up as we worked through these datasets:
-
-> A cluster is not an anomaly type. A cluster is an operational phase -- the machine warming up, running normally, cooling down. Anomalies can happen *within* any phase. Clustering discovers structure; anomaly detection finds deviations from it.
-
-This matters for methods like TICC that segment time series into regimes. Genesis is the clearest example (9 labeled phases), but all five datasets show some form of regime structure when you look at the right temporal scale.
+An important distinction throughout: a cluster represents an *operational phase* (machine warming up, running at steady state, shutting down), not an anomaly type. Anomalies can occur within any phase. Clustering recovers temporal structure; anomaly detection finds deviations from it. This is relevant for methods like TICC that segment multivariate time series into regimes.
 
 ## Other
 
-The [`mtad-gat-experiment/`](mtad-gat-experiment/) folder contains an MTAD-GAT implementation and a sample dataset from Azure Anomaly Detector -- separate from the dataset exploration work above.
+[`mtad-gat-experiment/`](mtad-gat-experiment/) -- MTAD-GAT implementation with a sample dataset from Azure Anomaly Detector.
 
 ## References
 
